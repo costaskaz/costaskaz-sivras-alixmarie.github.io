@@ -1,0 +1,174 @@
+<html>
+  <head>
+      <title>Three.js Alix360</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+
+      <style>
+           body {margin: 0;}
+           canvas {width: 100%; height: 100%; }
+      </style>
+      </head>
+
+
+      <body>
+
+        <audio loop id="music" preload="auto" style="display: none">
+	     	<source src="audio/alixgym.mp3" type="audio/mp3">
+	      </audio>
+
+
+
+        <script src="js/three.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/GLTFLoader.js"></script>
+        <script src="js/DRACOLoader.js"></script>
+        
+
+
+
+
+
+
+          <script>
+
+
+
+
+
+               var scene = new THREE.Scene;
+               var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000);
+               document.addEventListener('mousedown', onDocumentMouseDown, false);
+
+               function onDocumentMouseDown (event){
+                var listener = new THREE.AudioListener();
+                camera.add (listener);
+
+                var audioElement = document.getElementById( 'music');
+                audioElement.play();
+   }
+
+              document.addEventListener("touchstart", function(event){
+
+                var listener = new THREE.AudioListener();
+                camera.add (listener);
+
+                var audioElement = document.getElementById( 'music');
+                audioElement.play();
+
+              }, true);
+
+
+
+
+
+               var renderer = new THREE.WebGLRenderer();
+               renderer.setSize( window.innerWidth, window.innerHeight);
+               document.body.appendChild(renderer.domElement );
+
+               window.addEventListener ('resize', function()
+             {
+               var width = window.innerWidth;
+               var height = window.innerHeight;
+               renderer.setSize(width, height);
+               camera.aspect = width / height;
+               camera.updateProjectionMatrix();
+             });
+
+             controls = new THREE.OrbitControls( camera, renderer.domElement);
+             controls.minDistance = 1;
+             controls.maxDistance = 10;
+
+
+
+               //create the shape
+
+
+               //create a material, colour or image texture
+
+
+
+               camera.position.z = 3;
+               // create skybox
+               var geometry = new THREE.CubeGeometry (10000, 10000, 10000);
+               var cubeMaterials =
+               [
+                 new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load("images/alix_ft.jpg"), side: THREE.DoubleSide}),
+                 new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load("images/alix_bk.jpg"), side: THREE.DoubleSide}),
+                 new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load("images/alix_up.jpg"), side: THREE.DoubleSide}),
+                 new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load("images/alix_dn.jpg"), side: THREE.DoubleSide}),
+                 new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load("images/alix_rt.jpg"), side: THREE.DoubleSide}),
+                 new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load("images/alix_lf.jpg"), side: THREE.DoubleSide})
+
+
+
+               ];
+
+               var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
+               var cube = new THREE.Mesh(geometry, cubeMaterial);
+               scene.add(cube);
+               // create lights
+               var ambientLight = new THREE.AmbientLight(0xFFFFFF, 1);
+               scene.add (ambientLight);
+
+               var directionalLight = new THREE.DirectionalLight (0xffffff, 50);
+               directionalLight.position.set(0,0,0);
+               directionalLight.castShadow = true;
+               scene.add(directionalLight);
+
+
+
+               // game logic
+               var update = function ()
+               {
+
+               };
+              // draw scene
+               var render = function()
+               {
+                 renderer.render(scene, camera);
+
+               };
+               // run game loop (update, render, repeat)
+               var GameLoop = function()
+               {
+                 requestAnimationFrame(GameLoop);
+
+                 update();
+                 render();
+               };
+
+               GameLoop();
+
+
+
+
+
+
+               //load model
+
+               var loader = new THREE.GLTFLoader();
+               loader.load('models/scene.glb', function(gltf){
+
+                 scene.add(gltf.scene);
+                 renderer.render(scene, camera);
+               });
+
+              //sound
+
+
+
+
+
+              // create an AudioListener and add it to the camera
+
+
+
+
+
+
+
+
+
+          </script>
+          </body>
